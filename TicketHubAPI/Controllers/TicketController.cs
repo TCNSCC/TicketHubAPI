@@ -13,16 +13,14 @@ namespace TicketHubAPI.Controllers
         private readonly QueueClient _queueClient;
         private readonly IConfiguration _configuration;
 
-        // Constructor
         public TicketController(IConfiguration configuration)
         {
             _configuration = configuration;
-            // Get connection string from appsettings.json or secrets.json
+            
             string connectionString = _configuration["AzureStorageConnectionString"];
             if (string.IsNullOrEmpty(connectionString))
             {
-                // return BadRequest("An error was encountered");
-                //rewritten due to error being thrown in code
+                
                 throw new ArgumentException("Azure Storage Connection String is missing or invalid.");
             }
             _queueClient = new QueueClient(connectionString, "tickethub");
@@ -47,7 +45,7 @@ namespace TicketHubAPI.Controllers
 
             try
             {
-                // Serialize the ticket object to JSON
+                
                 string ticketJson = JsonSerializer.Serialize(ticket);
             
                 _queueClient.SendMessage(Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(ticketJson)));
